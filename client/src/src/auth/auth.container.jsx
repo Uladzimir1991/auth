@@ -11,24 +11,21 @@ import {
     InputStyled, SwitchSession,
     WrapperStyled
 } from "./auth.styled";
-import {AuthContainerType} from "./auth.types";
 
-export const AuthContainer = ({setIsAuthed}: AuthContainerType) => {
+export const AuthContainer = ({setIsAuthed}) => {
     const [data, setData] = useState({
-        id: '',
         email: '',
         password: ''
     })
-    const [authType, setAuthType] = useState<string>('login')
+    const [authType, setAuthType] = useState('login')
 
-    // @ts-ignore
     const {setUser} = useAuth()
 
     const {mutateAsync: loginAsync} = useMutation
         ('login', () => AuthService.login(data.email, data.password),{
             onError: (error => console.error(error)),
             onSuccess: ({data}) => {
-                localStorage.setItem('token', data.user._id)
+                localStorage.setItem('token', data.accessToken)
                 setIsAuthed(true)
                 setUser(data.user)
             }
@@ -42,9 +39,9 @@ export const AuthContainer = ({setIsAuthed}: AuthContainerType) => {
             }
         })
 
-    const isAuthenticated: boolean = authType === 'login'
+    const isAuthenticated = authType === 'login'
 
-    const handleSubmit = (event: { preventDefault: () => void; }) => {
+    const handleSubmit = (event) => {
         event.preventDefault()
 
         if(isAuthenticated) {
@@ -54,11 +51,11 @@ export const AuthContainer = ({setIsAuthed}: AuthContainerType) => {
         }
     }
 
-    const handleEmailChange = (event: { target: { value: any; }; }) => {
+    const handleEmailChange = (event) => {
         setData({...data, email: event.target.value})
     }
 
-    const handlePasswordChange = (event: { target: { value: any; }; }) => {
+    const handlePasswordChange = (event) => {
         setData({...data, password: event.target.value})
     }
 
