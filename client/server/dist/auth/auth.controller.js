@@ -20,6 +20,9 @@ let AuthController = class AuthController {
     constructor(AuthService) {
         this.AuthService = AuthService;
     }
+    async getAllUsers() {
+        return this.AuthService.getAllUsers();
+    }
     async getUser(id) {
         return this.AuthService.getUser(id);
     }
@@ -30,6 +33,14 @@ let AuthController = class AuthController {
         return this.AuthService.register(dto);
     }
 };
+__decorate([
+    (0, common_1.UsePipes)(new common_1.ValidationPipe()),
+    (0, common_1.HttpCode)(200),
+    (0, common_1.Get)('users'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], AuthController.prototype, "getAllUsers", null);
 __decorate([
     (0, common_1.UsePipes)(new common_1.ValidationPipe()),
     (0, common_1.HttpCode)(200),

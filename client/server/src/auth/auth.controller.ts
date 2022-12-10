@@ -8,6 +8,13 @@ export class AuthController {
 
     @UsePipes(new ValidationPipe())
     @HttpCode(200)
+    @Get('users')
+    async getAllUsers() {
+        return this.AuthService.getAllUsers()
+    }
+
+    @UsePipes(new ValidationPipe())
+    @HttpCode(200)
     @Get('user/:id')
     async getUser(@Param() id: string) {
         return this.AuthService.getUser(id)

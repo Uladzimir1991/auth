@@ -11,8 +11,12 @@ export class AuthService {
     constructor(@InjectModel(UserModel) private readonly UserModel: ModelType<UserModel>,
                 private readonly JwtService: JwtService) {}
 
-    async getUser(id: string) {
-        return this.UserModel.findOne({id: id});
+    async getAllUsers(): Promise<UserModel[]> {
+        return this.UserModel.find()
+    }
+
+    async getUser(id: string): Promise<UserModel> {
+        return this.UserModel.findOne({id: id})
     }
 
     async login(dto: AuthDto) {
@@ -21,7 +25,7 @@ export class AuthService {
         const tokens = await this.issueTokenPair(String(user._id))
 
         return {
-            user: this.returnUserFields(user),
+            user: this.returnLoginUserFields(user),
             ...tokens
         }
     }
@@ -34,14 +38,14 @@ export class AuthService {
 
         const salt = await genSalt(10)
 
-        const newUser = new this.UserModel({email: dto.email, password: await hash(dto.password, salt)})
+        const newUser = new this.UserModel({name: dto.name, phone: dto.phone, email: dto.email, password: await hash(dto.password, salt)})
 
         const user = await newUser.save()
 
         const tokens = await this.issueTokenPair(String(user._id))
 
         return {
-            user: this.returnUserFields(user),
+            user: this.returnRegisterUserFields(user),
             ...tokens
         }
     }
@@ -70,7 +74,17 @@ export class AuthService {
         return { accessToken }
     }
 
-    returnUserFields(user: UserModel) {
+    returnRegisterUserFields(user: UserModel) {
+        return {
+            _id: user._id,
+            name: user.name,
+            phone: user.phone,
+            email: user.email,
+            created: new Date(user.createdAt)
+        }
+    }
+
+    returnLoginUserFields(user: UserModel) {
         return {
             _id: user._id,
             email: user.email,

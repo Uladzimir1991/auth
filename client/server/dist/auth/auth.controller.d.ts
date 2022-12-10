@@ -28,9 +28,8 @@ import { AuthService } from "./auth.service";
 export declare class AuthController {
     private readonly AuthService;
     constructor(AuthService: AuthService);
-    getUser(id: string): Promise<import("mongoose").Document<import("mongoose").Types.ObjectId, import("@typegoose/typegoose/lib/types").BeAnObject, import("../user/user.model").UserModel> & import("../user/user.model").UserModel & import("@typegoose/typegoose/lib/types").IObjectWithTypegooseFunction & Required<{
-        _id: import("mongoose").Types.ObjectId;
-    }>>;
+    getAllUsers(): Promise<import("../user/user.model").UserModel[]>;
+    getUser(id: string): Promise<import("../user/user.model").UserModel>;
     login(dto: AuthDto): Promise<{
         accessToken: string;
         user: {
@@ -43,6 +42,8 @@ export declare class AuthController {
         accessToken: string;
         user: {
             _id: import("mongoose").Types.ObjectId;
+            name: string;
+            phone: string;
             email: string;
             created: Date;
         };

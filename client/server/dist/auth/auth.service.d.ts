@@ -31,9 +31,8 @@ export declare class AuthService {
     private readonly UserModel;
     private readonly JwtService;
     constructor(UserModel: ModelType<UserModel>, JwtService: JwtService);
-    getUser(id: string): Promise<import("mongoose").Document<import("mongoose").Types.ObjectId, import("@typegoose/typegoose/lib/types").BeAnObject, UserModel> & UserModel & import("@typegoose/typegoose/lib/types").IObjectWithTypegooseFunction & Required<{
-        _id: import("mongoose").Types.ObjectId;
-    }>>;
+    getAllUsers(): Promise<UserModel[]>;
+    getUser(id: string): Promise<UserModel>;
     login(dto: AuthDto): Promise<{
         accessToken: string;
         user: {
@@ -46,6 +45,8 @@ export declare class AuthService {
         accessToken: string;
         user: {
             _id: import("mongoose").Types.ObjectId;
+            name: string;
+            phone: string;
             email: string;
             created: Date;
         };
@@ -56,7 +57,14 @@ export declare class AuthService {
     issueTokenPair(_id: string): Promise<{
         accessToken: string;
     }>;
-    returnUserFields(user: UserModel): {
+    returnRegisterUserFields(user: UserModel): {
+        _id: import("mongoose").Types.ObjectId;
+        name: string;
+        phone: string;
+        email: string;
+        created: Date;
+    };
+    returnLoginUserFields(user: UserModel): {
         _id: import("mongoose").Types.ObjectId;
         email: string;
         created: Date;

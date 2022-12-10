@@ -14,6 +14,23 @@ const class_validator_1 = require("class-validator");
 class AuthDto {
 }
 __decorate([
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], AuthDto.prototype, "name", void 0);
+__decorate([
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], AuthDto.prototype, "phone", void 0);
+__decorate([
+    (0, class_validator_1.MinLength)(6, {
+        message: 'Email cannot be less than 6 characters!'
+    }),
+    (0, class_validator_1.MaxLength)(50, {
+        message: 'Email cannot be more than 50 characters'
+    }),
+    (0, class_validator_1.Matches)(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/, {
+        message: 'Incorrect Email'
+    }),
     (0, class_validator_1.IsEmail)(),
     __metadata("design:type", String)
 ], AuthDto.prototype, "email", void 0);

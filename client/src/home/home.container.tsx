@@ -10,29 +10,42 @@ export const HomeContainer = () => {
     const [isAuthed, setIsAuthed] = useState<boolean>(false)
     const [token, setToken] = useState<string>(localStorage.getItem('token'))
     const [currentUser, setCurrentUser] = useState<UserModel>(user)
+    const [users, setUsers] = useState<UserModel[]>([])
 
     useEffect(() => {
+        console.log(isAuthed)
         setToken(localStorage.getItem('token'))
     }, [isAuthed])
 
-    async function getUser() {
-        await AuthService.getUser(token).then(
-            response => setCurrentUser(response.data)
+    async function getAllUsers() {
+        await AuthService.getAllUsers().then(
+            response => {
+                setUsers(response.data)
+            }
         )
 
-        return currentUser
+        return users
     }
 
-    console.log(token, isAuthed)
-
+    useEffect(() => {
+        getAllUsers()
+    }, [])
+    // console.log(token, isAuthed)
     return (
         token || isAuthed ?
             <UserInfoContainer
-                user={user || currentUser}
+                user={user}
                 setIsAuthed={setIsAuthed}
-                getUser={getUser}
+                currentUser={currentUser}
+                setCurrentUser={setCurrentUser}
+                users={users}
             />
             :
-            <AuthContainer setIsAuthed={setIsAuthed} />
+            <AuthContainer
+                setIsAuthed={setIsAuthed}
+                currentUser={currentUser}
+                users={users}
+                setUsers={setUsers}
+            />
     )
 }

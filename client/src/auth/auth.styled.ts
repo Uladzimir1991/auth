@@ -16,7 +16,7 @@ export const FormStyled = styled.form`
   margin: auto;
   min-width: 360px;
   width: 50%;
-  height: 50%;
+  height: auto;
 `
 
 export const InputStyled = styled.input`

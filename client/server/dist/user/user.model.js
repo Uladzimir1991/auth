@@ -15,6 +15,14 @@ const typegoose_1 = require("@typegoose/typegoose");
 class UserModel extends defaultClasses_1.TimeStamps {
 }
 __decorate([
+    (0, typegoose_1.prop)(),
+    __metadata("design:type", String)
+], UserModel.prototype, "name", void 0);
+__decorate([
+    (0, typegoose_1.prop)(),
+    __metadata("design:type", String)
+], UserModel.prototype, "phone", void 0);
+__decorate([
     (0, typegoose_1.prop)({ unique: true }),
     __metadata("design:type", String)
 ], UserModel.prototype, "email", void 0);

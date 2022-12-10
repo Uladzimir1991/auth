@@ -23,13 +23,16 @@ let AuthService = class AuthService {
         this.UserModel = UserModel;
         this.JwtService = JwtService;
     }
+    async getAllUsers() {
+        return this.UserModel.find();
+    }
     async getUser(id) {
         return this.UserModel.findOne({ id: id });
     }
     async login(dto) {
         const user = await this.ValidateUser(dto);
         const tokens = await this.issueTokenPair(String(user._id));
-        return Object.assign({ user: this.returnUserFields(user) }, tokens);
+        return Object.assign({ user: this.returnLoginUserFields(user) }, tokens);
     }
     async register(dto) {
         const oldUser = await this.UserModel.findOne({ email: dto.email });
@@ -37,10 +40,10 @@ let AuthService = class AuthService {
             throw new common_1.BadRequestException('User with this email is already in the system');
         }
         const salt = await (0, bcryptjs_1.genSalt)(10);
-        const newUser = new this.UserModel({ email: dto.email, password: await (0, bcryptjs_1.hash)(dto.password, salt) });
+        const newUser = new this.UserModel({ name: dto.name, phone: dto.phone, email: dto.email, password: await (0, bcryptjs_1.hash)(dto.password, salt) });
         const user = await newUser.save();
         const tokens = await this.issueTokenPair(String(user._id));
-        return Object.assign({ user: this.returnUserFields(user) }, tokens);
+        return Object.assign({ user: this.returnRegisterUserFields(user) }, tokens);
     }
     async ValidateUser(dto) {
         const user = await this.UserModel.findOne({ email: dto.email });
@@ -60,7 +63,16 @@ let AuthService = class AuthService {
         });
         return { accessToken };
     }
-    returnUserFields(user) {
+    returnRegisterUserFields(user) {
+        return {
+            _id: user._id,
+            name: user.name,
+            phone: user.phone,
+            email: user.email,
+            created: new Date(user.createdAt)
+        };
+    }
+    returnLoginUserFields(user) {
         return {
             _id: user._id,
             email: user.email,
